@@ -1,6 +1,6 @@
-package com.backend.converter;
+package com.backend.numeralconversion;
 
-import com.backend.converter.exception.InvalidRomanNumeralException;
+import com.backend.numeralconversion.exception.InvalidRomanNumeralException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,9 +13,6 @@ class RomanNumeralConverterTest {
 
     private RomanNumeralConverter romanNumeralConverter;
 
-    /**
-     * Este método se ejecuta antes de cada test para inicializar el objeto a probar.
-     */
     @BeforeEach
     void setUp() {
         romanNumeralConverter = new RomanNumeralConverter();

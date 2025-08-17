@@ -1,17 +1,39 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import com.backend.numeralconversion.RomanNumeralConverter;
+
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        boolean continue_program = true;
+        Scanner scanner = new Scanner(System.in);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
+        while(continue_program) {
+            System.out.println("Elija una opción para continuar? \n 1)Convertir de entero a romano \n 2)Convertir de romano a entero");
+            int op = scanner.nextInt();
+            switch (op) {
+                case 1: {
+                    System.out.println("Ingrese el número entero para convertirlo a número Romano entre 1 y 3999");
+                    int number =  scanner.nextInt();
+                    System.out.println("El numero " + number + " es " + romanNumeralConverter.toRoman(number) + " en romano");
+                    break;
+
+                }
+                case 2:{
+                    System.out.println("Ingrese el número romano para convertirlo a número decimal entre I y MMMCMXCIX");
+                    String roman =  scanner.next();
+                    System.out.println("El numero " + roman + " es " + romanNumeralConverter.toInt(roman) + " en decimal");
+                    break;
+
+                }
+                default: {
+                    continue_program = false;
+                    scanner.close();
+                    break;
+                }
+            }
         }
     }
 }

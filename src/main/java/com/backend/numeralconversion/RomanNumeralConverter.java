@@ -1,6 +1,6 @@
-package com.backend.converter;
+package com.backend.numeralconversion;
 
-import com.backend.converter.exception.InvalidRomanNumeralException;
+import com.backend.numeralconversion.exception.InvalidRomanNumeralException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,108 +8,70 @@ import java.util.regex.Pattern;
 
 public class RomanNumeralConverter {
 
-    //Diccionario Romano a Int
-    private static final LinkedHashMap<String, Integer> romanToIntMap;
+    private static final LinkedHashMap<String, Integer> ROMAN_VALUES = new LinkedHashMap<>();
     static {
-        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
-        tempMap.put("M", 1000);
-        tempMap.put("CM", 900);
-        tempMap.put("D", 500);
-        tempMap.put("CD", 400);
-        tempMap.put("C", 100);
-        tempMap.put("XC", 90);
-        tempMap.put("L", 50);
-        tempMap.put("XL", 40);
-        tempMap.put("X", 10);
-        tempMap.put("IX", 9);
-        tempMap.put("V", 5);
-        tempMap.put("IV", 4);
-        tempMap.put("I", 1);
-        romanToIntMap = tempMap;
+        ROMAN_VALUES.put("M", 1000);
+        ROMAN_VALUES.put("CM", 900);
+        ROMAN_VALUES.put("D", 500);
+        ROMAN_VALUES.put("CD", 400);
+        ROMAN_VALUES.put("C", 100);
+        ROMAN_VALUES.put("XC", 90);
+        ROMAN_VALUES.put("L", 50);
+        ROMAN_VALUES.put("XL", 40);
+        ROMAN_VALUES.put("X", 10);
+        ROMAN_VALUES.put("IX", 9);
+        ROMAN_VALUES.put("V", 5);
+        ROMAN_VALUES.put("IV", 4);
+        ROMAN_VALUES.put("I", 1);
     }
-
-    private static final Map<Integer, String> intToRomanMap = new LinkedHashMap<>();
-    static {
-        intToRomanMap.put(1000, "M");
-        intToRomanMap.put(900, "CM");
-        intToRomanMap.put(500, "D");
-        intToRomanMap.put(400, "CD");
-        intToRomanMap.put(100, "C");
-        intToRomanMap.put(90, "XC");
-        intToRomanMap.put(50, "L");
-        intToRomanMap.put(40, "XL");
-        intToRomanMap.put(10, "X");
-        intToRomanMap.put(9, "IX");
-        intToRomanMap.put(5, "V");
-        intToRomanMap.put(4, "IV");
-        intToRomanMap.put(1, "I");
-    }
-
 
     //  Pattern para verificar que sea un número romano bien escrito
-    private static final Pattern ROMAN_NUMERALS_PATTERN = Pattern.compile(
+    private static final Pattern ROMAN_PATTERN = Pattern.compile(
             "^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$"
     );
 
-    /**
-     * Convierte un número entero a su representación en números romanos.
-     *
-     * @param number el número entero a convertir. Debe estar en el rango [1, 3999].
-     * @return la cadena de texto con el número romano.
-     * @throws InvalidRomanNumeralException si el número de entrada no es válido.
-     */
+    /*
+     * Pasa un número decimal a número Romano
+    **/
     public String toRoman(int number) {
         if (number <= 0 || number > 3999) {
-            throw new InvalidRomanNumeralException("El número debe estar entre 1 y 3999.");
+            throw new InvalidRomanNumeralException("Número fuera de rango [1, 3999]");
         }
 
-        StringBuilder roman = new StringBuilder();
-        int tempNumber = number;
+        StringBuilder result = new StringBuilder();
+        int remaining = number;
 
-        for (Map.Entry<Integer, String> entry : intToRomanMap.entrySet()) {
-            int value = entry.getKey();
-            String symbol = entry.getValue();
-            while (tempNumber >= value) {
-                roman.append(symbol);
-                tempNumber -= value;
+        for (Map.Entry<String, Integer> entry : ROMAN_VALUES.entrySet()) {
+            while (remaining >= entry.getValue()) {
+                result.append(entry.getKey());
+                remaining -= entry.getValue();
             }
         }
-        return roman.toString();
+        return result.toString();
     }
-
-    /**
-     * Convierte un número romano a su representación entera.
-     *
-     * @param roman el número romano a convertir. Debe ser una cadena válida.
-     * @return el valor entero.
-     * @throws InvalidRomanNumeralException si la cadena de entrada no es un número romano válido.
-     */
+    /*
+     * Pasa un número Romano a número Decimal
+     **/
     public int toInt(String roman) {
         if (roman == null || roman.trim().isEmpty()) {
-            throw new InvalidRomanNumeralException("El número romano no puede ser nulo o vacío.");
+            throw new InvalidRomanNumeralException("Entrada nula o vacía");
         }
 
-        String romanCleaned = roman.toUpperCase().trim();
-        if (!ROMAN_NUMERALS_PATTERN.matcher(romanCleaned).matches()) {
-            throw new InvalidRomanNumeralException("El número romano '" + roman + "' no es una notación válida.");
+        String cleaned = roman.toUpperCase().trim();
+        if (!ROMAN_PATTERN.matcher(cleaned).matches()) {
+            throw new InvalidRomanNumeralException("Formato romano inválido con los símbolos permitidos");
         }
+
         int result = 0;
         int i = 0;
-        while (i < romanCleaned.length()) {
-            String currentSymbol = String.valueOf(romanCleaned.charAt(i));
-            if (i + 1 < romanCleaned.length()) {
-                String twoSymbols = romanCleaned.substring(i, i + 2);
-                if (romanToIntMap.containsKey(twoSymbols)) {
-                    result += romanToIntMap.get(twoSymbols);
-                    i += 2;
-                    continue;
-                }
-            }
-            if (romanToIntMap.containsKey(currentSymbol)) {
-                result += romanToIntMap.get(currentSymbol);
-                i++;
+
+        while (i < cleaned.length()) {
+            if (i + 1 < cleaned.length() && ROMAN_VALUES.containsKey(cleaned.substring(i, i + 2))) {
+                result += ROMAN_VALUES.get(cleaned.substring(i, i + 2));
+                i += 2;
             } else {
-                throw new InvalidRomanNumeralException("Símbolo romano no válido encontrado: " + currentSymbol);
+                result += ROMAN_VALUES.get(cleaned.substring(i, i + 1));
+                i++;
             }
         }
         return result;
