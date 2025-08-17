@@ -34,7 +34,7 @@ Sigue estos pasos desde la terminal para construir y probar el proyecto:
 ```
 git clone https://github.com/claudioush2016/possumus
 
-cd nombre-del-repositorio
+cd possumus
 ```
 ### 2) Construir el proyecto con Maven:
 Este comando descargará todas las dependencias (incluyendo JUnit) y compilará el código.
