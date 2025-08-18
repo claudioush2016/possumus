@@ -33,7 +33,7 @@ public class RomanNumeralConverter {
     /*
      * Pasa un número decimal a número Romano
     **/
-    public String toRoman(int number) {
+    public static String toRoman(int number) {
         if (number <= 0 || number > 3999) {
             throw new InvalidRomanNumeralException("Número fuera de rango [1, 3999]");
         }
@@ -52,7 +52,7 @@ public class RomanNumeralConverter {
     /*
      * Pasa un número Romano a número Decimal
      **/
-    public int toInt(String roman) {
+    public static int toInt(String roman) {
         if (roman == null || roman.trim().isEmpty()) {
             throw new InvalidRomanNumeralException("Entrada nula o vacía");
         }

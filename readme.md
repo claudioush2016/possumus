@@ -19,7 +19,7 @@ El proyecto sigue la estructura estándar de Maven:
 
   * com/backend/numeralconversion/exception/InvalidRomanNumeralException.java: Excepción personalizada para manejar errores.
   * org.example
-    * Main : Clase para correr la  **Fase 1** 
+    * Main : Clase para ejecutar la **Fase 1** 
 
 
 
@@ -27,7 +27,7 @@ El proyecto sigue la estructura estándar de Maven:
 
     * com/backend/numeralconversion/RomanNumeralConverterTest.java: Clase de pruebas con JUnit 5.
 
-## ▶️ Construcción y ejecución de los tests
+## ▶️ Construcción y ejecución de los tests (fase 1)
 Sigue estos pasos desde la terminal para construir y probar el proyecto:
 
 ### 1) Clonar el repositorio:
@@ -44,7 +44,7 @@ mvn clean install
 ### 3) Ejecutar los tests unitarios:
 Este comando ejecutará todas las pruebas definidas en la carpeta src/test/java.
 ```
-mvn test
+mvn test -Dtest=RomanNumeralConverterTest
 ```
 Si todas las pruebas pasan, verás un mensaje de **BUILD SUCCESS.**
 
@@ -58,7 +58,7 @@ Se le mostrara un menu para elegir entre 2 opciones
 
 Convetir de romano a decimal o de decimal a romano. 
 
-## 💡 Cómo usar el componente (FASE 1 )
+### 💡 Cómo usar el componente (FASE 1 )
 El componente principal es com.backend.numeralconversion.RomanNumeralConverter. Puedes crear una instancia de esta clase en tu código para usar sus métodos de conversión. 
 
 Incluye los metodos de 
@@ -66,7 +66,86 @@ Incluye los metodos de
 * **toRoman(int number):String** ---> Pasa el número de decimal a romano en un rango de 1-3999 
 * **toInt(String cadena): int**  ---> Pasa el número de romano a decimal en un rango de I-MMMCMXCIX
 
+## ▶️ Construcción y ejecución  (fase 2)
 
+Para la fase 2 se debe iniciar el servidor y probar los endpoints expuestos.
+
+### 1️⃣ Requisitos previos
+
+- Java 17
+- Maven 3.8+
+- IDE recomendado: IntelliJ, Eclipse o VS Code
+- Postman o cURL para probar los endpoints
+
+---
+
+### 2️⃣ Compilar y ejecutar la aplicación
+
+Desde la raíz del proyecto:
+
+```
+# Compilar el proyecto
+mvn clean install
+
+# Ejecutar la aplicación
+mvn spring-boot:run
+```
+Por defecto, Spring Boot levantará el servidor en http://localhost:8080.
+
+### 3️⃣ Endpoints disponibles
+
+| Endpoint               | Método | Parámetros       | Descripción                         |
+| ---------------------- | ------ | ---------------- | ----------------------------------- |
+| `/api/roman/toRoman`   | GET    | `value` (int)    | Convierte un número entero a romano |
+| `/api/roman/toInteger` | GET    | `value` (String) | Convierte un número romano a entero |
+
+### 4️⃣ Manejo de errores
+Si se envía un valor inválido, la API devuelve un JSON con detalles del error y código HTTP 400.
+
+GET http://localhost:8080/api/roman/toInteger?value=@
+#### Respuesta esperada
+```
+{
+"timestamp": "2025-08-18T12:00:00",
+"status": 400,
+"error": "Bad Request",
+"message": "Formato romano inválido con los símbolos permitidos",
+"code": "INVALID_ROMAN"
+}
+```
+
+### 5️⃣ Ejecutar tests de integración
+```
+# Ejecutar todos los tests
+mvn test -Dtest=RomanControllerIntegrationTest
+```
+
+Los tests incluyen:
+
+Casos válidos (toRoman y toInteger)
+
+Casos inválidos (símbolos incorrectos, números fuera de rango)
+
+Casos límite (0, negativos, números grandes)
+
+Validación de JSON de error con GlobalExceptionHandler
+
+
+# Ejemplos de uso con Postman o navegador:
+
+## Convertir 20 a romano
+GET http://localhost:8080/api/roman/toRoman?value=21
+### Respuesta esperada
+{
+"roman": "XX"
+}
+
+## Convertir XX a entero
+GET http://localhost:8080/api/roman/toInteger?value=XXI
+### Respuesta esperada
+{
+"roman": "20"
+}
 
 Autor: [Claudio Cabrera]
 
