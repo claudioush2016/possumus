@@ -11,21 +11,58 @@ Asegúrate de tener instalado lo siguiente en tu sistema:
 **Maven**: Versión 3.x o superior. Puedes verificar tu versión con el comando mvn -v.
 
 ## 🛠️ Estructura del proyecto
+### Fase 1 – Lógica básica de conversión
+
+La fase 1 contiene la implementación básica de la conversión y tests unitarios.
+
 El proyecto sigue la estructura estándar de Maven:
+```
+src/
+├─ main/
+│ └─ java/
+│ └─ com/backend/numeralconversion/
+│ ├─ RomanNumeralConverter.java # Lógica de conversión
+│ └─ exception/
+│ └─ InvalidRomanNumeralException.java # Excepción personalizada
+│ └─ org/example/
+│ └─ Main.java # Clase para ejecutar la Fase 1
+└─ test/
+└─ java/
+└─ com/backend/numeralconversion/
+└─ RomanNumeralConverterTest.java # Tests unitarios JUnit 5
+```
+### Fase 2 – Arquitectura Spring Boot con REST API
+Contiene : 
+ * controller → endpoints REST
 
-* src/main/java/: Contiene el código fuente de la aplicación.
+ * service → lógica de negocio desacoplada
 
-  * com/backend/numeralconversion/RomanNumeralConverter.java: La clase principal con la lógica de conversión.
+ * dto → estructuras de entrada y salida
 
-  * com/backend/numeralconversion/exception/InvalidRomanNumeralException.java: Excepción personalizada para manejar errores.
-  * org.example
-    * Main : Clase para ejecutar la **Fase 1** 
-
-
-
-* src/test/java/: Contiene los tests unitarios para validar la funcionalidad.
-
-    * com/backend/numeralconversion/RomanNumeralConverterTest.java: Clase de pruebas con JUnit 5.
+ * exception → manejo global de errores con GlobalExceptionHandler
+```
+src/
+├─ main/
+│   └─ java/
+│       └─ com/backend/numeralconversion/
+│           ├─ BackendApplication.java          # Clase principal Spring Boot
+│           ├─ controller/
+│           │   └─ RomanController.java        # Endpoints REST
+│           ├─ service/
+│           │   └─ RomanService.java           # Lógica de negocio
+│           ├─ dto/
+│           │   ├─ RomanRequest.java           # DTO de entrada
+│           │   ├─ RomanResponse.java          # DTO de salida
+│           │   └─ ErrorResponse.java          # DTO de errores
+│           └─ exception/
+│               ├─ InvalidRomanNumeralException.java  # Excepción personalizada
+│               └─ GlobalExceptionHandler.java       # Manejo global de errores
+└─ test/
+└─ java/
+└─ com/backend/numeralconversion/
+└─ controller/
+└─ RomanControllerIntegrationTest.java # Tests de integración
+```
 
 ## ▶️ Construcción y ejecución de los tests (fase 1)
 Sigue estos pasos desde la terminal para construir y probar el proyecto:
