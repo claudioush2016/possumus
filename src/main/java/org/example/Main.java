@@ -6,34 +6,60 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        boolean continue_program = true;
+        boolean continueProgram = true;
         Scanner scanner = new Scanner(System.in);
+        RomanNumeralConverter converter = new RomanNumeralConverter();
 
-        RomanNumeralConverter romanNumeralConverter = new RomanNumeralConverter();
-        while(continue_program) {
-            System.out.println("Elija una opción para continuar? \n 1)Convertir de entero a romano \n 2)Convertir de romano a entero");
-            int op = scanner.nextInt();
-            switch (op) {
-                case 1: {
-                    System.out.println("Ingrese el número entero para convertirlo a número Romano entre 1 y 3999");
-                    int number =  scanner.nextInt();
-                    System.out.println("El numero " + number + " es " + romanNumeralConverter.toRoman(number) + " en romano");
+        while (continueProgram) {
+            System.out.println("\n=======================================");
+            System.out.println("Elija una opción para continuar:");
+            System.out.println("1) Convertir de entero a romano");
+            System.out.println("2) Convertir de romano a entero");
+            System.out.println("Otro) Salir");
+            System.out.println("=======================================");
+            System.out.print("Opción: ");
+
+            String input = scanner.nextLine();
+            switch (input) {
+                case "1": {
+                    System.out.print("Ingrese un número entero entre 1 y 3999: ");
+                    try {
+                        int number = Integer.parseInt(scanner.nextLine());
+                        String roman = converter.toRoman(number);
+                        System.out.println("Resultado: " + number + " → " + roman);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Debe ingresar un número válido.");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    waitEnter(scanner);
                     break;
-
                 }
-                case 2:{
-                    System.out.println("Ingrese el número romano para convertirlo a número decimal entre I y MMMCMXCIX");
-                    String roman =  scanner.next();
-                    System.out.println("El numero " + roman + " es " + romanNumeralConverter.toInt(roman) + " en decimal");
+                case "2": {
+                    System.out.print("Ingrese un número romano (I - MMMCMXCIX): ");
+                    String romanInput = scanner.nextLine().toUpperCase();
+                    try {
+                        int result = converter.toInt(romanInput);
+                        System.out.println("Resultado: " + romanInput + " → " + result);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    waitEnter(scanner);
                     break;
-
                 }
                 default: {
-                    continue_program = false;
-                    scanner.close();
+                    continueProgram = false;
+                    System.out.println("Saliendo del programa. ¡Hasta luego!");
                     break;
                 }
             }
         }
+        scanner.close();
+    }
+
+    // Método para pausar hasta que el usuario presione Enter
+    private static void waitEnter(Scanner scanner) {
+        System.out.println("\nPresione Enter para continuar...");
+        scanner.nextLine();
     }
 }
